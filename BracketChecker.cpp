@@ -1,15 +1,16 @@
 #include "BracketChecker.h"
+#include "BracketException.h"
 #include <fstream>
 #include <cstdlib>
 #include <ctime>
 
 void validateInput(const std::string& str) {
     if (str.empty()) {
-        throw std::invalid_argument("Ошибка: введена пустая строка.");
+        throw BracketException(ErrorType::InvalidInput,"Ошибка: введена пустая строка.");
     }
     for (char ch : str) {
         if (ch != '(' && ch != ')' && ch != '[' && ch != ']' && ch != '{' && ch != '}') {
-            throw std::invalid_argument("Ошибка: строка содержит недопустимые символы. Разрешены только (), [], {}.");
+            throw BracketException(ErrorType::InvalidInput, "Ошибка: строка содержит недопустимые символы. Разрешены только (), [], {}.");
         }
     }
 }
@@ -40,7 +41,6 @@ int checkBracketSequence(const CustomCharList& list) {
     return 0;
 }
 
-// 1. Способ ввода: Генерация случайной последовательности
 std::string generateRandomBrackets(size_t length) {
     if (length == 0) return "";
     const char types[] = {'(', ')', '[', ']', '{', '}'};
@@ -51,14 +51,13 @@ std::string generateRandomBrackets(size_t length) {
     return result;
 }
 
-// 2. Способ ввода: Чтение из файла
 std::string readFromFile(const std::string& filename) {
     std::ifstream file(filename);
     if (!file.is_open()) {
-        throw std::runtime_error("Ошибка: Не удалось открыть файл '" + filename + "'");
+        throw BracketException(ErrorType::FileNotFound,"Ошибка: Не удалось открыть файл '" + filename + "'");
     }
     std::string result;
-    std::getline(file, result); // Считываем первую строку файла
+    std::getline(file, result);
     file.close();
     return result;
 }

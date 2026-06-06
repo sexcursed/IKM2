@@ -13,7 +13,6 @@ struct BracketInfo {
 void validateInput(const std::string& str);
 int checkBracketSequence(const CustomCharList& list);
 
-// Новые функции генерации и работы с файлами
 std::string generateRandomBrackets(size_t length);
 std::string readFromFile(const std::string& filename);
 

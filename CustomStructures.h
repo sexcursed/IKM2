@@ -3,6 +3,7 @@
 
 #include <stdexcept>
 #include <cstddef>
+#include "BracketException.h"
 
 // Шаблонный класс динамического Стека на базе связного списка
 template <typename T>
@@ -19,7 +20,6 @@ private:
 public:
     CustomStack() : topNode(nullptr), stackSize(0) {}
     
-    // Деструктор для предотвращения утечек памяти
     ~CustomStack() { clear(); }
 
     // Запрет копирования во избежание некорректного дублирования указателей
@@ -33,7 +33,7 @@ public:
 
     void pop() {
         if (isEmpty()) {
-            throw std::underflow_error("Ошибка структуры: попытка удаления из пустого стека.");
+            throw BracketException(ErrorType::StackUnderflow, "Ошибка структуры: попытка удаления из пустого стека.");
         }
         Node* temp = topNode;
         topNode = topNode->next;
@@ -43,7 +43,7 @@ public:
 
     T top() const {
         if (isEmpty()) {
-            throw std::underflow_error("Ошибка структуры: стек пуст.");
+            throw BracketException(ErrorType::StackUnderflow, "Ошибка структуры: стек пуст.");
         }
         return topNode->data;
     }
@@ -73,6 +73,7 @@ public:
     CustomCharList() : head(nullptr), listSize(0) {}
     ~CustomCharList() { clear(); }
 
+    // Запрет копирования во избежание некорректного дублирования указателей
     CustomCharList(const CustomCharList&) = delete;
     CustomCharList& operator=(const CustomCharList&) = delete;
 
@@ -91,7 +92,7 @@ public:
 
     char getAt(size_t index) const {
         if (index >= listSize) {
-            throw std::out_of_range("Ошибка: выход за границы списка.");
+            throw BracketException(ErrorType::ListOutOfRange, "Ошибка: выход за границы списка.");
         }
         Node* current = head;
         for (size_t i = 0; i < index; ++i) {
